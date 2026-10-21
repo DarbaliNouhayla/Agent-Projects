@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// STUB MODEL — this will be replaced/merged with Module 1's real User model.
+// Only the fields Module 2 needs are present. Do not add auth fields
+// (password, email verification, etc.) here — that is Module 1's job.
+model User {
+  id        String   @id @default(cuid())
+  userJob   String   // e.g. "développeur", "manager", "étudiant"
+  userGoal  String   // e.g. "améliorer sa productivité", "gérer le stress"
+  chats     Chat[]
+  createdAt DateTime @default(now())
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  messages  Json     // array of ChatMessage objects
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
